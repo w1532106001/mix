@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mix/model/IndexVideoRecommend.dart';
 import 'package:mix/res/dimens.dart';
+import 'package:mix/ui/view/videoDetailPage.dart';
 
 class VideoHorizontalList extends StatelessWidget {
   const VideoHorizontalList({Key key}) : super(key: key);
@@ -24,30 +25,69 @@ class VideoHorizontalList extends StatelessWidget {
     indexVideoRecommend.videoTuhmbnailList = new List();
     indexVideoRecommend.videoTuhmbnailList.add(videoThumbnail);
     indexVideoRecommend.videoTuhmbnailList.add(videoThumbnail2);
+    indexVideoRecommend.videoTuhmbnailList.add(videoThumbnail2);
+    indexVideoRecommend.videoTuhmbnailList.add(videoThumbnail2);
+    indexVideoRecommend.videoTuhmbnailList.add(videoThumbnail2);
+    indexVideoRecommend.videoTuhmbnailList.add(videoThumbnail2);
+    indexVideoRecommend.videoTuhmbnailList.add(videoThumbnail2);
+    indexVideoRecommend.videoTuhmbnailList.add(videoThumbnail2);
+    indexVideoRecommend.videoTuhmbnailList.add(videoThumbnail2);
+    indexVideoRecommend.videoTuhmbnailList.add(videoThumbnail2);
 
     return Padding(
       padding: EdgeInsets.only(left: 20),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
             indexVideoRecommend.name,
-            style: TextStyle(color: Colors.white, fontSize: Dimens.font_sp16),
+            style: TextStyle(color: Colors.white, fontSize: Dimens.font_sp18),
           ),
-          new Expanded(
+          Container(
+            height: 180,
+            padding: EdgeInsets.only(top: 20),
             child: ListView.builder(
               shrinkWrap: true, //解决 listview 嵌套报错
               // physics: NeverScrollableScrollPhysics(), //禁用滑动事件
               scrollDirection: Axis.horizontal,
               itemCount: indexVideoRecommend.videoTuhmbnailList.length,
-              itemExtent: 50,
               itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  width: 50,
-                  child: Text("123"),
-                );
+                return Padding(
+                    padding: EdgeInsets.only(left: (index==0?0:20)),
+                    
+                    child: GestureDetector(
+                      onTap:()=>{
+                         Navigator.of(context)
+                              .push(new MaterialPageRoute(builder: (_) {
+                            return new VideoDetailPage(
+                                videoId: indexVideoRecommend
+                              .videoTuhmbnailList[index].videoId);
+                          }))
+                      },
+                      child:Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        ClipRRect(borderRadius: BorderRadius.circular(10),
+                        child: Image.network(
+                          indexVideoRecommend
+                              .videoTuhmbnailList[index].videoThumbnailUrl,
+                          width: 80,
+                          height: 120,
+                          fit: BoxFit.cover,
+                        ),)
+                        ,
+                        Padding(
+                            padding: EdgeInsets.only(top: 10),
+                            child: Text(
+                              indexVideoRecommend
+                                  .videoTuhmbnailList[index].videoName,
+                              style: TextStyle(color:Colors.white,fontSize:Dimens.font_sp12),
+                            ))
+                      ],
+                    )
+                    ));
               },
             ),
-            flex: 1,
           )
         ],
       ),

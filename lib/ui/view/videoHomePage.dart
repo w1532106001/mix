@@ -18,12 +18,17 @@ class VideoHomePage extends StatelessWidget {
         top: true,
         child: Scaffold(
           backgroundColor: Color.fromARGB(255, 43, 42, 50),
-          body: Column(
+          body: ListView(
+            scrollDirection: Axis.vertical,
+            
             children: <Widget>[
               VideoBannerWidget(
                 banner: videoPageBanner,
               ),
-              VideoHorizontalList()
+              VideoHorizontalList(),
+              VideoHorizontalList(),
+              VideoHorizontalList(),
+              VideoHorizontalList(),
             ],
           ),
         ));
