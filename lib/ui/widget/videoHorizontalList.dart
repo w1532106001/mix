@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mix/model/IndexVideoRecommend.dart';
 import 'package:mix/res/dimens.dart';
 import 'package:mix/ui/view/videoDetailPage.dart';
+import 'package:mix/common/extension.dart';
 
 class VideoHorizontalList extends StatelessWidget {
   const VideoHorizontalList({Key key}) : super(key: key);
@@ -33,7 +34,6 @@ class VideoHorizontalList extends StatelessWidget {
     indexVideoRecommend.videoTuhmbnailList.add(videoThumbnail2);
     indexVideoRecommend.videoTuhmbnailList.add(videoThumbnail2);
     indexVideoRecommend.videoTuhmbnailList.add(videoThumbnail2);
-
     return Padding(
       padding: EdgeInsets.only(left: 20),
       child: Column(
@@ -52,40 +52,36 @@ class VideoHorizontalList extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               itemCount: indexVideoRecommend.videoTuhmbnailList.length,
               itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                    padding: EdgeInsets.only(left: (index==0?0:20)),
-                    
-                    child: GestureDetector(
-                      onTap:()=>{
-                         Navigator.of(context)
+                return GestureDetector(
+                    onTap: () => {
+                          Navigator.of(context)
                               .push(new MaterialPageRoute(builder: (_) {
                             return new VideoDetailPage(
                                 videoId: indexVideoRecommend
-                              .videoTuhmbnailList[index].videoId);
+                                    .videoTuhmbnailList[index].videoId);
                           }))
-                      },
-                      child:Column(
+                        },
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        ClipRRect(borderRadius: BorderRadius.circular(10),
-                        child: Image.network(
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.network(
+                            indexVideoRecommend
+                                .videoTuhmbnailList[index].videoThumbnailUrl,
+                            width: 80,
+                            height: 120,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Text(
                           indexVideoRecommend
-                              .videoTuhmbnailList[index].videoThumbnailUrl,
-                          width: 80,
-                          height: 120,
-                          fit: BoxFit.cover,
-                        ),)
-                        ,
-                        Padding(
-                            padding: EdgeInsets.only(top: 10),
-                            child: Text(
-                              indexVideoRecommend
-                                  .videoTuhmbnailList[index].videoName,
-                              style: TextStyle(color:Colors.white,fontSize:Dimens.font_sp12),
-                            ))
+                              .videoTuhmbnailList[index].videoName,
+                          style: TextStyle(
+                              color: Colors.white, fontSize: Dimens.font_sp12),
+                        ).padding(EdgeInsets.only(top: 10))
                       ],
-                    )
-                    ));
+                    )).padding(EdgeInsets.only(left: (index == 0 ? 0 : 20)));
               },
             ),
           )
