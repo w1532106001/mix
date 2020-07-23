@@ -1,18 +1,22 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:mix/model/Banner.dart';
+import 'package:mix/common/baseStatelessWidget.dart';
+import 'package:mix/entity/VideoHomePageBanner.dart';
 import 'package:mix/res/dimens.dart';
+import 'package:mix/ui/view/videoSearchPage.dart';
 
-class VideoBannerWidget extends StatelessWidget {
-  final VideoPageBanner banner;
+class VideoBannerWidget extends BaseStatelessWidget {
+  final VideoHomePageBanner videoHomePageBanner;
 
-  const VideoBannerWidget({Key key, this.banner}) : super(key: key);
+  const VideoBannerWidget({this.videoHomePageBanner, Key key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     double shadowHeight = 50;
     double bannerHeight = 300;
+
     return Stack(
       children: <Widget>[
         Padding(
@@ -23,7 +27,7 @@ class VideoBannerWidget extends StatelessWidget {
                 width: double.infinity,
                 height: bannerHeight,
                 child: Image.network(
-                  banner.imageUrl,
+                  videoHomePageBanner.imageUrl,
                   fit: BoxFit.fill,
                 ),
               ),
@@ -61,13 +65,13 @@ class VideoBannerWidget extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                banner.title,
+                                videoHomePageBanner.title,
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: Dimens.font_sp18),
                               ),
                               Text(
-                                banner.description,
+                                videoHomePageBanner.description,
                                 style: TextStyle(
                                     color: Colors.white70,
                                     fontSize: Dimens.font_sp12),
@@ -82,7 +86,7 @@ class VideoBannerWidget extends StatelessWidget {
                           padding: EdgeInsets.only(right: Dimens.gap_dp16),
                           alignment: Alignment.centerRight,
                           child: Text(
-                            banner.score.toString(),
+                            videoHomePageBanner.score.toString(),
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: Dimens.font_sp18),
@@ -92,7 +96,21 @@ class VideoBannerWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-              )
+              ),
+              Positioned(
+                right: 10,
+                top: 10,
+                child: IconButton(
+                  color: Colors.white,
+                  icon: Icon(Icons.search),
+                  onPressed: () => {
+                    Navigator.of(context)
+                        .push(new MaterialPageRoute(builder: (_) {
+                      return new VideoSearchPage();
+                    }))
+                  },
+                ),
+              ),
             ],
           ),
         ),

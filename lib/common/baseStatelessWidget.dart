@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mix/model/mvpView.dart';
+import 'file:///C:/Users/whc/flutter_code/mix/lib/common/mvpView.dart';
 
 import '../res/dimens.dart';
 import '../res/dimens.dart';

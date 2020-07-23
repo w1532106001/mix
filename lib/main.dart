@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mix/ui/view/videoHomePage.dart';
+import 'package:mix/viewModel/VideoHomePageViewModel.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -27,7 +29,8 @@ class MyApp extends StatelessWidget {
           // closer together (more dense) than on mobile platforms.
           visualDensity: VisualDensity.adaptivePlatformDensity,
           backgroundColor: Color.fromARGB(255, 43, 42, 50)),
-      home: VideoHomePage(),
+      home: ChangeNotifierProvider(
+          create: (_) => VideoHomePageViewModel(), child: VideoHomePage()),
     );
   }
 }
