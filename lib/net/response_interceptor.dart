@@ -9,7 +9,7 @@ class ResponseInterceptors extends InterceptorsWrapper {
   onResponse(Response response) async {
     RequestOptions option = response.request;
 
-    try {
+    
       if (option.contentType != null && option.contentType.contains("text")) {
         return response.data;
       }
@@ -20,9 +20,10 @@ class ResponseInterceptors extends InterceptorsWrapper {
         BaseData baseData = BaseData.fromJson(response.data);
         return baseData;
       }
-    } catch (e) {
-      print(e.toString() + option.path);
-      return e;
-    }
+
+  }
+  @override
+  Future onError(DioError err) {
+    return super.onError(err);
   }
 }

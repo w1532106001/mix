@@ -24,7 +24,7 @@ extension WidgetExt on Widget {
     );
   }
 
-  Material gesture({
+  Material gesture(gestureTapCallback, {
     GestureTapCallback onTap,
     GestureTapCallback onDoubleTap,
     GestureLongPressCallback onLongPress,

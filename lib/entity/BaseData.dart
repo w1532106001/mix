@@ -2,6 +2,7 @@ class BaseData{
   String message;
   int code;
   Map<String,dynamic> data;
+  BaseData();
   BaseData.fromJson(Map<String,dynamic> json){
     message = json['message'];
     code = json['code'];

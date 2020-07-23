@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mix/entity/VideoColumn.dart';
 import 'package:mix/res/dimens.dart';
@@ -6,11 +7,10 @@ import 'package:mix/common/extension.dart';
 
 class VideoHorizontalList extends StatelessWidget {
   final VideoColumn videoColumn;
-  const VideoHorizontalList({this.videoColumn,Key key}) : super(key: key);
+  const VideoHorizontalList(this.videoColumn, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     return Padding(
       padding: EdgeInsets.only(left: 20),
       child: Column(
@@ -34,8 +34,8 @@ class VideoHorizontalList extends StatelessWidget {
                           Navigator.of(context)
                               .push(new MaterialPageRoute(builder: (_) {
                             return new VideoDetailPage(
-                                videoId: videoColumn
-                                    .videoSimpleList[index].videoId);
+                                videoId:
+                                    videoColumn.videoSimpleList[index].videoId);
                           }))
                         },
                     child: Column(
@@ -43,20 +43,28 @@ class VideoHorizontalList extends StatelessWidget {
                       children: <Widget>[
                         ClipRRect(
                           borderRadius: BorderRadius.circular(10),
-                          child: Image.network(
-                            videoColumn
-                                .videoSimpleList[index].thumbnailUrl,
+                          child: CachedNetworkImage(
+                            imageUrl:
+                                videoColumn.videoSimpleList[index].thumbnailUrl,
+                            placeholder: (context, url) =>
+                                Center(child: CircularProgressIndicator()),
+                            errorWidget: (context, url, error) =>
+                                Center(child: Icon(Icons.error)),
                             width: 80,
                             height: 120,
                             fit: BoxFit.cover,
                           ),
                         ),
-                        Text(
-                          videoColumn
-                              .videoSimpleList[index].videoName,
-                          style: TextStyle(
-                              color: Colors.white, fontSize: Dimens.font_sp12),
-                        ).padding(EdgeInsets.only(top: 10))
+                        Container(
+                          width: 80,
+                          child: Text(
+                            videoColumn.videoSimpleList[index].videoName,
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: Dimens.font_sp12),
+                          ).padding(EdgeInsets.only(top: 10)),
+                        ),
                       ],
                     )).padding(EdgeInsets.only(left: (index == 0 ? 0 : 20)));
               },

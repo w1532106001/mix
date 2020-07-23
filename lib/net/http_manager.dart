@@ -57,7 +57,7 @@ class HttpManager {
     try {
       response = await _dio.get(api, queryParameters: params);
     } on DioError catch (e) {
-      return resultError(e);
+      throw e;
     }
 
     if (response.data is DioError) {

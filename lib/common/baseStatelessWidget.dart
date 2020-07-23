@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'file:///C:/Users/whc/flutter_code/mix/lib/common/mvpView.dart';
 
 import '../res/dimens.dart';
-import '../res/dimens.dart';
+import 'mvpView.dart';
 
 class BaseStatelessWidget extends StatelessWidget implements MvpView {
   const BaseStatelessWidget({Key key}) : super(key: key);
@@ -16,46 +15,52 @@ class BaseStatelessWidget extends StatelessWidget implements MvpView {
   hideProgressDialog() {}
 
   @override
-  showError() {
-    return showErrorWithMessage("未知错误");
+  Widget showError(bool isReload) {
+    return showErrorWithMessage("网络异常",isReload);
   }
 
   @override
-  showErrorWithMessage(String message) {
-    return Scaffold(
-      body: Center(
-        child: Text(
-          message,
-          style: TextStyle(color: Colors.black, fontSize: Dimens.font_sp18),
-        ),
+  Widget showErrorWithMessage(String message,bool isReload) {
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            message,
+            style: TextStyle(color: Colors.black, fontSize: Dimens.font_sp18),
+          ),
+          Text(
+            isReload?"点击重新加载":"",
+            style: TextStyle(color: Colors.black, fontSize: Dimens.font_sp18),
+          )
+        ],
       ),
     );
   }
 
   @override
-  showLoading() {
+  Widget showLoading() {
     return showLoadingWithMessage("正在加载中");
   }
 
   @override
-  showLoadingWithMessage(String message) {
-    return Scaffold(
-      body: Center(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          CircularProgressIndicator(),
-          Padding(
-              padding: EdgeInsets.only(top: Dimens.gap_dp12),
-              child: Text(
-                message,
-                style:
-                    TextStyle(color: Colors.black, fontSize: Dimens.font_sp18),
-              ))
-        ],
-      )),
-    );
+  Widget showLoadingWithMessage(String message) {
+    return Center(
+        child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
+      children: <Widget>[
+        CircularProgressIndicator(),
+        Padding(
+            padding: EdgeInsets.only(top: Dimens.gap_dp12),
+            child: Text(
+              message,
+              style: TextStyle(color: Colors.black, fontSize: Dimens.font_sp18),
+            ))
+      ],
+    ));
   }
 
   @override

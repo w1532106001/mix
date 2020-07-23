@@ -3,9 +3,9 @@ abstract class MvpView {
 
   showLoadingWithMessage(String message);
 
-  showError();
+  showError(bool isReload);
 
-  showErrorWithMessage(String message);
+  showErrorWithMessage(String message,bool isReload);
 
   showMessage(String message);
 

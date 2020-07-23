@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mix/common/baseStatelessWidget.dart';
 import 'package:mix/entity/VideoHomePageBanner.dart';
@@ -9,7 +10,7 @@ import 'package:mix/ui/view/videoSearchPage.dart';
 class VideoBannerWidget extends BaseStatelessWidget {
   final VideoHomePageBanner videoHomePageBanner;
 
-  const VideoBannerWidget({this.videoHomePageBanner, Key key})
+  const VideoBannerWidget(this.videoHomePageBanner, {Key key})
       : super(key: key);
 
   @override
@@ -24,13 +25,21 @@ class VideoBannerWidget extends BaseStatelessWidget {
           child: Stack(
             children: <Widget>[
               Container(
-                width: double.infinity,
-                height: bannerHeight,
-                child: Image.network(
-                  videoHomePageBanner.imageUrl,
-                  fit: BoxFit.fill,
-                ),
-              ),
+                  width: double.infinity,
+                  height: bannerHeight,
+                  child: CachedNetworkImage(
+                    imageUrl: videoHomePageBanner.imageUrl,
+                    placeholder: (context, url) =>
+                        Center(child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) =>
+                        Center(child: Icon(Icons.error)),
+                    fit: BoxFit.fill,
+                  )),
+              //   Image.network(
+              //     videoHomePageBanner.imageUrl,
+              //     fit: BoxFit.fill,
+              //   ),
+              // ),
               Padding(
                   padding: EdgeInsets.only(top: bannerHeight - 80),
                   child: ClipRect(
