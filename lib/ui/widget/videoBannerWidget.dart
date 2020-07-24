@@ -108,11 +108,10 @@ class VideoBannerWidget extends BaseStatelessWidget {
               ),
               Positioned(
                 right: 10,
-                top: 10,
-                child: IconButton(
-                  color: Colors.white,
-                  icon: Icon(Icons.search),
-                  onPressed: () => {
+                top: 50,
+                child: GestureDetector(
+                  child: Icon(Icons.search,color: Colors.white,),
+                  onTap: () => {
                     Navigator.of(context)
                         .push(new MaterialPageRoute(builder: (_) {
                       return new VideoSearchPage();
