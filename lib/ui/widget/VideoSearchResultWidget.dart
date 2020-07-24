@@ -7,7 +7,6 @@ class VideoSearchResultWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<VideoSearchViewModel>(context);
-
     return Text("搜索结果");
   }
 }

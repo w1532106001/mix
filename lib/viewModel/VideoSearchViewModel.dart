@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:mix/common/VideoModelState.dart';
+import 'package:mix/entity/BaseListData.dart';
 import 'package:mix/entity/VideoHomePageData.dart';
 import 'package:mix/entity/BaseData.dart';
 import 'package:mix/net/address.dart';
@@ -8,26 +9,28 @@ import 'package:mix/net/http_manager.dart';
 import 'package:rxdart/rxdart.dart';
 
 class VideoSearchViewModel extends ChangeNotifier {
-  final _model = VideoHomePageDataModel();
-  var response = BaseData();
+  final _model = VideoSearchModel();
+  var response = BaseListData();
   int state = VideoModelState.notRequested; // 0 未请求，1 正在请求， 2 请求成功， 3请求失败
   var searchWordController = TextEditingController();
   bool isSearch = false;
 
-  onInput(){
-    if(searchWordController.text.isNotEmpty){
+  Map<int, dynamic> selectCategoryMap = new Map();
+
+  onInput() {
+    if (searchWordController.text.isNotEmpty) {
       isSearch = true;
-    }else{
+    } else {
       isSearch = false;
     }
     notifyListeners();
   }
 
-  getVideoHomePageData() {
+  getCategoryGroupList() {
     /// 不为 0 说明上一条请求未完成，直接退出
     if (state != VideoModelState.notRequested) return;
 
-    _model.getVideoHomePageData().doOnListen(() {
+    _model.getCategoryGroupList().doOnListen(() {
       state = VideoModelState.requesting;
       notifyListeners();
     }).listen((event) {
@@ -43,14 +46,19 @@ class VideoSearchViewModel extends ChangeNotifier {
     });
   }
 
-  VideoHomePageViewModel() {
+  VideoSearchViewModel() {
+    getCategoryGroupList();
+  }
+
+  addSelectCategoryMap(int key,dynamic value){
+    selectCategoryMap[key] = value;
+    notifyListeners();
   }
 }
 
-class VideoHomePageDataModel {
-  VideoHomePageData videoPageBanner = new VideoHomePageData();
+class VideoSearchModel {
   var params = DataHelper.getBaseMap();
 
-  Stream getVideoHomePageData() => Stream.fromFuture(
-      HttpManager.getInstance().get(Address.videoHomePageDataUrl, params));
+  Stream getCategoryGroupList() => Stream.fromFuture(
+      HttpManager.getInstance().get(Address.categoryGroupListUrl, params));
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mix/viewModel/VideoCategoryWidget.dart';
-import 'package:mix/viewModel/VideoSearchResultWidget.dart';
+import 'file:///C:/Users/25082/flutterCode/mix/lib/ui/widget/VideoCategoryWidget.dart';
+import 'file:///C:/Users/25082/flutterCode/mix/lib/ui/widget/VideoSearchResultWidget.dart';
 import 'package:mix/viewModel/VideoSearchViewModel.dart';
 import 'package:provider/provider.dart';
 import 'package:synchronized/extension.dart';
@@ -52,11 +52,16 @@ class _VideoSearchPageColumn extends StatelessWidget {
             provider.onInput();
           },
         ),
-        Padding(
-          padding: EdgeInsets.only(top: 20,),
-          child: provider.isSearch ? VideoSearchResultWidget() : VideoCategoryWidget(),
-        ),
+        Expanded(
+            flex: 1,
+            child: Padding(
+              padding: EdgeInsets.only(top: 20),
 
+              child: provider.isSearch
+                  ? VideoSearchResultWidget()
+                  : VideoCategoryWidget(),
+//          ),
+            ))
       ],
     );
   }
