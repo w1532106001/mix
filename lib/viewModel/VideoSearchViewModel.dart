@@ -15,11 +15,15 @@ class VideoSearchViewModel extends ChangeNotifier {
   var searchWordController = TextEditingController();
   bool isSearch = false;
 
+  ScrollController scrollController = new ScrollController();
+  bool isShowTop = true;
+
   Map<int, dynamic> selectCategoryMap = new Map();
 
   onInput() {
     if (searchWordController.text.isNotEmpty) {
       isSearch = true;
+
     } else {
       isSearch = false;
     }
@@ -46,11 +50,25 @@ class VideoSearchViewModel extends ChangeNotifier {
     });
   }
 
+//  initScrollHeight(){
+//    scrollController.;
+//  }
+
   VideoSearchViewModel() {
+    scrollController.addListener(() {
+//      var tempSsShowTop = scrollController.offset >= 1000;
+//
+//      if (tempSsShowTop != isShowTop) {
+//        isShowTop = tempSsShowTop;
+//        this.notifyListeners();
+//      }
+
+    });
+
     getCategoryGroupList();
   }
 
-  addSelectCategoryMap(int key,dynamic value){
+  addSelectCategoryMap(int key, dynamic value) {
     selectCategoryMap[key] = value;
     notifyListeners();
   }

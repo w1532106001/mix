@@ -1,44 +1,49 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:mix/entity/BaseData.dart';
-import 'package:mix/entity/CategoryGroup.dart';
+import 'package:mix/common/VideoModelState.dart';
+import 'package:mix/entity/BaseListData.dart';
 import 'package:mix/entity/DataPage.dart';
+import 'package:mix/entity/VideoHomePageData.dart';
+import 'package:mix/entity/BaseData.dart';
 import 'package:mix/entity/VideoSimple.dart';
 import 'package:mix/net/address.dart';
 import 'package:mix/net/data_helper.dart';
 import 'package:mix/net/http_manager.dart';
 import 'package:rxdart/rxdart.dart';
 
-class CategoryViewModel extends ChangeNotifier {
+import 'CategoryViewModel.dart';
+
+class VideoSearchResultViewModel extends ChangeNotifier {
+
   int pageSize = 10;
   int currPage = 1;
   var params = DataHelper.getBaseMap();
+  TextEditingController searchWordController;
 
   Map<int, dynamic> selectCategoryMap = new Map();
   EasyRefreshController controller = EasyRefreshController();
   List<VideoSimple> videoSimpleList = List();
 
-  CategoryViewModel(List<CategoryGroup> categoryGroups) {
-    categoryGroups.forEach((element) {
-      addSelectCategoryMap(element.id, element.categoryList[0].name);
-    });
-  }
+  VideoSearchResultViewModel(this.searchWordController);
 
-  addSelectCategoryMap(int key, dynamic value) {
-    selectCategoryMap[key] = value;
-  }
 
-  final _model = CategoryPageModel();
+
+  final _model = VideoSearchResultModel();
   var response = BaseData();
+  onInputRefresh() {
+    if (searchWordController.text.trim().isNotEmpty) {
+        refresh();
+    }
+
+  }
 
   refresh() {
+    print(searchWordController.text);
     pageSize = 10;
     currPage = 1;
     params["pageSize"] = pageSize;
     params["currPage"] = currPage;
-    _model.getVideoHomePageData(params).doOnListen(() {}).listen((event) {
+    _model.getVideoSearchPage(params).doOnListen(() {}).listen((event) {
       //成功
       response = event;
       DataPage page = DataPage.fromJson(response.data);
@@ -61,7 +66,7 @@ class CategoryViewModel extends ChangeNotifier {
     currPage++;
     params["pageSize"] = pageSize;
     params["currPage"] = currPage;
-    _model.getVideoHomePageData(params).doOnListen(() {}).listen((event) {
+    _model.getVideoSearchPage(params).doOnListen(() {}).listen((event) {
       //成功
       response = event;
       DataPage page = DataPage.fromJson(response.data);
@@ -79,7 +84,8 @@ class CategoryViewModel extends ChangeNotifier {
   }
 }
 
-class CategoryPageModel {
-  Stream getVideoHomePageData(params) => Stream.fromFuture(
-      HttpManager.getInstance().post(Address.videoCategoryPageUrl, params));
+class VideoSearchResultModel {
+
+  Stream getVideoSearchPage(params) => Stream.fromFuture(
+      HttpManager.getInstance().post(Address.videoSearchPageUrl, params));
 }

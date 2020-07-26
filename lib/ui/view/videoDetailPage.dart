@@ -1,26 +1,37 @@
+import 'package:awsome_video_player/awsome_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:mix/common/baseStatelessWidget.dart';
+import 'package:mix/ui/widget/VideoDetailBottomWidget.dart';
+import 'package:mix/ui/widget/videoPlayWidget.dart';
+import 'package:mix/viewModel/VideoPlayViewModel.dart';
+import 'package:provider/provider.dart';
 
-class VideoDetailPage extends BaseStatelessWidget {
+class VideoDetailPage extends StatefulWidget {
   final int videoId;
-  const VideoDetailPage({this.videoId, Key key}) : super(key: key);
+
+  VideoDetailPage({this.videoId, Key key}) : super(key: key);
+
+  _VideoDetailPageState createState() => _VideoDetailPageState();
+}
+
+class _VideoDetailPageState extends State<VideoDetailPage> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        top: true,
-        child: Scaffold(
-            backgroundColor: Color.fromARGB(255, 43, 42, 50),
-            body: Stack(
-              children: <Widget>[
-                Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    child: Image.network(
-                      "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2614500706.webp",
-                      fit: BoxFit.cover,
-                    )),
-              ],
-            )));
+      top: true,
+      child: Scaffold(
+          body: ChangeNotifierProvider(
+              create: (_) => VideoPlayViewModel(),
+              child: Column(children: <Widget>[
+                VideoPlayWidget(),
+                //update data source
+                VideoDetailBottomWidget(),
+              ]))),
+    );
   }
 }

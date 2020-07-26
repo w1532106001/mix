@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mix/viewModel/VideoSearchResultViewModel.dart';
 import 'file:///C:/Users/25082/flutterCode/mix/lib/ui/widget/VideoCategoryWidget.dart';
 import 'file:///C:/Users/25082/flutterCode/mix/lib/ui/widget/VideoSearchResultWidget.dart';
 import 'package:mix/viewModel/VideoSearchViewModel.dart';
@@ -11,14 +12,21 @@ class VideoSearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var videoSearchViewModel = VideoSearchViewModel();
     return Scaffold(
       appBar: AppBar(title: Text("搜索")),
       backgroundColor: Color.fromARGB(255, 43, 42, 50),
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        child: ChangeNotifierProvider(
-          create: (_) => VideoSearchViewModel(),
+        child: MultiProvider(
+          providers: [
+            ChangeNotifierProvider<VideoSearchViewModel>(
+                create: (context) => videoSearchViewModel),
+            ChangeNotifierProvider<VideoSearchResultViewModel>(
+                create: (context) => VideoSearchResultViewModel(
+                    videoSearchViewModel.searchWordController)),
+          ],
           child: _VideoSearchPageColumn(),
         ),
       ),
@@ -32,6 +40,8 @@ class _VideoSearchPageColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<VideoSearchViewModel>(context);
+    final videoSearchResultViewProvider =
+        Provider.of<VideoSearchResultViewModel>(context);
 
     return Column(
       children: <Widget>[
@@ -50,13 +60,13 @@ class _VideoSearchPageColumn extends StatelessWidget {
           controller: provider.searchWordController,
           onChanged: (v) {
             provider.onInput();
+            videoSearchResultViewProvider.onInputRefresh();
           },
         ),
         Expanded(
             flex: 1,
             child: Padding(
               padding: EdgeInsets.only(top: 20),
-
               child: provider.isSearch
                   ? VideoSearchResultWidget()
                   : VideoCategoryWidget(),

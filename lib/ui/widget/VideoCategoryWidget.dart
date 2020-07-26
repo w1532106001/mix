@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mix/common/VideoModelState.dart';
 import 'package:mix/common/baseStatelessWidget.dart';
@@ -33,22 +34,52 @@ class VideoCategoryWidget extends BaseStatelessWidget {
           });
           return ChangeNotifierProvider(
             create: (_) => CategoryViewModel(categoryGroups),
-            child: Column(
-              children: <Widget>[
-                ListView.builder(
-                    shrinkWrap: true,
-                    physics: new NeverScrollableScrollPhysics(),
-                    //加上这句话，widget就不会滑动了
-                    itemCount: categoryGroups.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return CategoryListLineWidget(
-                        categoryGroups[index],
-                      );
-                    }),
-                VideoCategoryPageWidget()
-              ],
+            child: NestedScrollView(
+              controller: provider.scrollController,
+              headerSliverBuilder:
+                  (BuildContext context, bool innerBoxIsScrolled) {
+                return <Widget>[
+                  new SliverAppBar(
+                    backgroundColor: Color.fromARGB(255, 43, 42, 50),
+                    automaticallyImplyLeading: false,
+                    floating: false,
+                    pinned: true,
+                    flexibleSpace: innerBoxIsScrolled
+                        ? NestedScrollViewCenterTitle()
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            physics: new NeverScrollableScrollPhysics(),
+                            //加上这句话，widget就不会滑动了
+                            itemCount: categoryGroups.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return CategoryListLineWidget(
+                                categoryGroups[index],
+                              );
+                            }),
+                    expandedHeight: categoryGroups.length * 50.0,
+                  )
+                ];
+              },
+              body: VideoCategoryPageWidget(),
+//              children: <Widget>[
+//                ListView.builder(
+//                    shrinkWrap: true,
+//                    physics: new NeverScrollableScrollPhysics(),
+//                    //加上这句话，widget就不会滑动了
+//                    itemCount: categoryGroups.length,
+//                    itemBuilder: (BuildContext context, int index) {
+//                      return CategoryListLineWidget(
+//                        categoryGroups[index],
+//                      );
+//                    }),
+//                Container(
+//                  height: MediaQuery.of(context).size.height-500,
+//                    child: VideoCategoryPageWidget()  )
+
+//                Container()
             ),
           );
+//        return Container();
         } else {
           return GestureDetector(
             child: showErrorWithMessage(provider.response.message, true),
@@ -68,5 +99,34 @@ class VideoCategoryWidget extends BaseStatelessWidget {
           },
         );
     }
+  }
+}
+
+class NestedScrollViewCenterTitle extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final provider = Provider.of<VideoSearchViewModel>(context);
+    final categoryViewModelProvider = Provider.of<CategoryViewModel>(context);
+    String a = "";
+    categoryViewModelProvider.selectCategoryMap.forEach((key, value) {
+      a += value + "·";
+    });
+    return GestureDetector(
+      child: Container(
+          height: 30,
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(a.substring(0, a.length - 1)),
+                Icon(Icons.arrow_drop_down)
+              ],
+            ),
+          )),
+      onTap: () {
+        provider.scrollController.animateTo(.0,
+            duration: Duration(milliseconds: 200), curve: Curves.ease);
+      },
+    );
   }
 }

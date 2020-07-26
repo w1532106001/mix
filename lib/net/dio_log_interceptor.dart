@@ -61,8 +61,7 @@ class DioLogInterceptor extends Interceptor {
     }
 
     print("hahahah--->" + responseStr.length.toString());
-    String sub = responseStr.substring(0, 5000);
-//    print(responseStr);
+ //    print(responseStr);
     printWrapped(responseStr);
     return response;
   }

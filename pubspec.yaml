@@ -37,6 +37,7 @@ dependencies:
   permission_handler: ^5.0.1+1
   fluttertoast: ^7.0.1
   webview_flutter: ^0.3.22+1
+  awsome_video_player: ^1.0.8+1
 
 dev_dependencies:
   flutter_test:

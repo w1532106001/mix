@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:mix/entity/BaseData.dart';
 import 'code.dart';
 import 'dio_log_interceptor.dart';
 import 'response_interceptor.dart';
@@ -72,7 +73,7 @@ class HttpManager {
     Response response;
 
     try {
-      response = await _dio.post(api, data: params);
+      response = await _dio.post(api, queryParameters: params);
     } on DioError catch (e) {
       return resultError(e);
     }
@@ -85,7 +86,7 @@ class HttpManager {
   }
 }
 
-ResultData resultError(DioError e) {
+BaseData resultError(DioError e) {
   Response errorResponse;
   if (e.response != null) {
     errorResponse = e.response;
@@ -96,6 +97,8 @@ ResultData resultError(DioError e) {
       e.type == DioErrorType.RECEIVE_TIMEOUT) {
     errorResponse.statusCode = Code.NETWORK_TIMEOUT;
   }
-  return new ResultData(
-      errorResponse.statusMessage, false, errorResponse.statusCode);
+  BaseData baseData = new BaseData();
+  baseData.message = errorResponse.statusMessage;
+  baseData.code = errorResponse.statusCode;
+  return baseData;
 }
