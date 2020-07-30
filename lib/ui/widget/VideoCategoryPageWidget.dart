@@ -15,11 +15,7 @@ class VideoCategoryPageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<CategoryViewModel>(context);
-    String a = "";
-    provider.selectCategoryMap.forEach((key, value) {
-      a += value + ",";
-    });
-//    return Text("视频分页$a");
+
     return  EasyRefresh(
       child: GridView.builder(
           shrinkWrap: true,
@@ -30,7 +26,7 @@ class VideoCategoryPageWidget extends StatelessWidget {
             childAspectRatio: 3/4, //纵轴缩放比例
 
           ),
-          itemCount: provider.videoSimpleList.length,
+          itemCount: provider.videoList.length,
 
           itemBuilder: (context, index) {
             return GestureDetector(
@@ -38,7 +34,7 @@ class VideoCategoryPageWidget extends StatelessWidget {
                       Navigator.of(context)
                           .push(new MaterialPageRoute(builder: (_) {
                         return new VideoDetailPage(
-                            videoId: provider.videoSimpleList[index].videoId);
+                            videoId: provider.videoList[index].id);
                       }))
                     },
                 child: Column(
@@ -48,7 +44,7 @@ class VideoCategoryPageWidget extends StatelessWidget {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(6),
                       child: CachedNetworkImage(
-                        imageUrl: provider.videoSimpleList[index].thumbnailUrl,
+                        imageUrl: provider.videoList[index].coverUrl,
                         placeholder: (context, url) =>
                             Center(child: CircularProgressIndicator()),
                         errorWidget: (context, url, error) =>
@@ -61,7 +57,7 @@ class VideoCategoryPageWidget extends StatelessWidget {
                     Container(
                       width: 80,
                       child: Center(child:Text(
-                        provider.videoSimpleList[index].videoName,
+                        provider.videoList[index].name,
                         textAlign: TextAlign.left,
                         style: TextStyle(
                             color: Colors.white, fontSize: Dimens.font_sp12),

@@ -4,6 +4,7 @@ import 'package:mix/common/VideoModelState.dart';
 import 'package:mix/common/baseStatelessWidget.dart';
 import 'package:mix/entity/Category.dart';
 import 'package:mix/entity/CategoryGroup.dart';
+import 'package:mix/model/tag_group.dart';
 import 'package:mix/ui/widget/CategoryListLineWidget.dart';
 import 'package:mix/ui/widget/VideoCategoryPageWidget.dart';
 import 'package:mix/viewModel/CategoryViewModel.dart';
@@ -27,13 +28,13 @@ class VideoCategoryWidget extends BaseStatelessWidget {
       case 2:
         //请求成功拿到response 解析实体类
         if (provider.response.code == 0) {
-          List<CategoryGroup> categoryGroups = List();
+          List<TagGroup> tagGroupList = List();
           provider.response.data.forEach((element) {
-            CategoryGroup categoryGroup = CategoryGroup.fromJson(element);
-            categoryGroups.add(categoryGroup);
+            TagGroup tagGroup = TagGroup.fromJson(element);
+            tagGroupList.add(tagGroup);
           });
           return ChangeNotifierProvider(
-            create: (_) => CategoryViewModel(categoryGroups),
+            create: (_) => CategoryViewModel(tagGroupList),
             child: NestedScrollView(
               controller: provider.scrollController,
               headerSliverBuilder:
@@ -50,13 +51,13 @@ class VideoCategoryWidget extends BaseStatelessWidget {
                             shrinkWrap: true,
                             physics: new NeverScrollableScrollPhysics(),
                             //加上这句话，widget就不会滑动了
-                            itemCount: categoryGroups.length,
+                            itemCount: tagGroupList.length,
                             itemBuilder: (BuildContext context, int index) {
                               return CategoryListLineWidget(
-                                categoryGroups[index],
+                                tagGroupList[index],
                               );
                             }),
-                    expandedHeight: categoryGroups.length * 50.0,
+                    expandedHeight: tagGroupList.length * 50.0,
                   )
                 ];
               },
@@ -107,9 +108,10 @@ class NestedScrollViewCenterTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = Provider.of<VideoSearchViewModel>(context);
     final categoryViewModelProvider = Provider.of<CategoryViewModel>(context);
-    String a = "";
-    categoryViewModelProvider.selectCategoryMap.forEach((key, value) {
-      a += value + "·";
+
+    String text = "";
+    categoryViewModelProvider.selectTagMap.forEach((key, value) {
+      text += value.name + "·";
     });
     return GestureDetector(
       child: Container(
@@ -118,7 +120,7 @@ class NestedScrollViewCenterTitle extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(a.substring(0, a.length - 1)),
+                Text(text.substring(0, text.length - 1)),
                 Icon(Icons.arrow_drop_down)
               ],
             ),

@@ -6,6 +6,7 @@ import 'package:mix/entity/DataPage.dart';
 import 'package:mix/entity/VideoHomePageData.dart';
 import 'package:mix/entity/BaseData.dart';
 import 'package:mix/entity/VideoSimple.dart';
+import 'package:mix/model/video.dart';
 import 'package:mix/net/address.dart';
 import 'package:mix/net/data_helper.dart';
 import 'package:mix/net/http_manager.dart';
@@ -16,13 +17,13 @@ import 'CategoryViewModel.dart';
 class VideoSearchResultViewModel extends ChangeNotifier {
 
   int pageSize = 10;
-  int currPage = 1;
+  int pageNum = 1;
   var params = DataHelper.getBaseMap();
   TextEditingController searchWordController;
 
   Map<int, dynamic> selectCategoryMap = new Map();
   EasyRefreshController controller = EasyRefreshController();
-  List<VideoSimple> videoSimpleList = List();
+  List<Video> videoList = List();
 
   VideoSearchResultViewModel(this.searchWordController);
 
@@ -38,21 +39,22 @@ class VideoSearchResultViewModel extends ChangeNotifier {
   }
 
   refresh() {
-    print(searchWordController.text);
     pageSize = 10;
-    currPage = 1;
+    pageNum = 1;
     params["pageSize"] = pageSize;
-    params["currPage"] = currPage;
+    params["pageNum"] = pageNum;
+    params["searchWord"] = searchWordController.text;
     _model.getVideoSearchPage(params).doOnListen(() {}).listen((event) {
       //成功
       response = event;
       DataPage page = DataPage.fromJson(response.data);
-      videoSimpleList.clear();
+      videoList.clear();
       page.data.forEach((element) {
-        videoSimpleList.add(VideoSimple.fromJson(element));
+        videoList.add(Video.fromJson(element));
       });
-      controller.finishRefresh(success: true,noMore: !page.canLoad);
+      controller.finishRefresh(success: true,noMore: page.size==0);
       controller.resetLoadState();
+      pageNum++;
       notifyListeners();
     }, onError: (e) {
       //失败
@@ -63,17 +65,18 @@ class VideoSearchResultViewModel extends ChangeNotifier {
   }
 
   load() {
-    currPage++;
     params["pageSize"] = pageSize;
-    params["currPage"] = currPage;
+    params["pageNum"] = pageNum;
+    params["searchWord"] = searchWordController.text;
     _model.getVideoSearchPage(params).doOnListen(() {}).listen((event) {
       //成功
       response = event;
       DataPage page = DataPage.fromJson(response.data);
       page.data.forEach((element) {
-        videoSimpleList.add(VideoSimple.fromJson(element));
+        videoList.add(Video.fromJson(element));
       });
-      controller.finishLoad(noMore: !page.canLoad);
+      controller.finishLoad(noMore: !page.hasNextPage);
+      pageNum++;
       notifyListeners();
     }, onError: (e) {
       //失败
@@ -87,5 +90,5 @@ class VideoSearchResultViewModel extends ChangeNotifier {
 class VideoSearchResultModel {
 
   Stream getVideoSearchPage(params) => Stream.fromFuture(
-      HttpManager.getInstance().post(Address.videoSearchPageUrl, params));
+      HttpManager.getInstance().get(Address.videoSearchPageUrl, params));
 }

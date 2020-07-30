@@ -25,7 +25,7 @@ class VideoSearchResultWidget extends BaseStatelessWidget {
             childAspectRatio: 3/4, //纵轴缩放比例
 
           ),
-          itemCount: provider.videoSimpleList.length,
+          itemCount: provider.videoList.length,
 
           itemBuilder: (context, index) {
             return GestureDetector(
@@ -33,7 +33,7 @@ class VideoSearchResultWidget extends BaseStatelessWidget {
                   Navigator.of(context)
                       .push(new MaterialPageRoute(builder: (_) {
                     return new VideoDetailPage(
-                        videoId: provider.videoSimpleList[index].videoId);
+                        videoId: provider.videoList[index].id);
                   }))
                 },
                 child: Column(
@@ -43,7 +43,7 @@ class VideoSearchResultWidget extends BaseStatelessWidget {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(6),
                       child: CachedNetworkImage(
-                        imageUrl: provider.videoSimpleList[index].thumbnailUrl,
+                        imageUrl: provider.videoList[index].coverUrl,
                         placeholder: (context, url) =>
                             Center(child: CircularProgressIndicator()),
                         errorWidget: (context, url, error) =>
@@ -56,7 +56,7 @@ class VideoSearchResultWidget extends BaseStatelessWidget {
                     Container(
                       width: 80,
                       child: Center(child:Text(
-                        provider.videoSimpleList[index].videoName,
+                        provider.videoList[index].name,
                         textAlign: TextAlign.left,
                         style: TextStyle(
                             color: Colors.white, fontSize: Dimens.font_sp12),

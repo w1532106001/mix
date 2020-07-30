@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:mix/entity/CategoryGroup.dart';
+import 'package:mix/model/tag_group.dart';
 import 'package:mix/viewModel/CategoryViewModel.dart';
 import 'package:mix/viewModel/VideoSearchViewModel.dart';
 import 'package:provider/provider.dart';
 
 class CategoryListLineWidget extends StatelessWidget {
-  final CategoryGroup categoryGroup;
+  final TagGroup tagGroup;
 
-  CategoryListLineWidget(this.categoryGroup, {Key key}) : super(key: key);
+  CategoryListLineWidget(this.tagGroup, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class CategoryListLineWidget extends StatelessWidget {
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           shrinkWrap: true,
-          itemCount: categoryGroup.categoryList.length,
+          itemCount: tagGroup.tagList.length,
           itemBuilder: (BuildContext context, int index) {
             return Padding(
                 padding: EdgeInsets.only(left: 10),
@@ -27,19 +28,18 @@ class CategoryListLineWidget extends StatelessWidget {
                   child: Container(
                     width: 50,
                     child: Text(
-                      categoryGroup.categoryList[index].name,
+                      tagGroup.tagList[index].name,
                       style: TextStyle(
-                          color: provider.selectCategoryMap[categoryGroup
-                                      .categoryList[index].categoryGroupId] ==
-                                  categoryGroup.categoryList[index].name
+                          color: provider.selectTagMap[tagGroup.tagList[index].groupId] ==
+                              tagGroup.tagList[index]
                               ? Colors.white
                               : Colors.white24),
                     ),
                   ),
                   onTap: () {
                     provider.addSelectCategoryMap(
-                        categoryGroup.categoryList[index].categoryGroupId,
-                        categoryGroup.categoryList[index].name);
+                        tagGroup.tagList[index].groupId,
+                        tagGroup.tagList[index]);
                     // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
                     provider.notifyListeners();
                   },
