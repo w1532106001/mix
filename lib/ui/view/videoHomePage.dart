@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mix/common/VideoModelState.dart';
 import 'package:mix/common/baseStatelessWidget.dart';
-import 'package:mix/entity/VideoColumn.dart';
-import 'package:mix/entity/VideoHomePageData.dart';
+import 'package:mix/model/collection.dart';
+import 'package:mix/model/video_home_page_data.dart';
+
 import 'package:mix/ui/widget/videoBannerWidget.dart';
 import 'package:mix/ui/widget/videoHorizontalList.dart';
 import 'package:mix/viewModel/VideoHomePageViewModel.dart';
@@ -41,10 +42,10 @@ class VideoHomePage extends BaseStatelessWidget {
                 physics:
                     new NeverScrollableScrollPhysics(), //加上这句话，widget就不会滑动了
                 shrinkWrap: true,
-                itemCount: videoHomePageData.videoColumnList.length,
+                itemCount: videoHomePageData.collectionList.length,
                 itemBuilder: (BuildContext context, int index) {
                   return VideoHorizontalList(
-                          videoHomePageData.videoColumnList[index])
+                          videoHomePageData.collectionList[index])
                       .padding(EdgeInsets.only(top: index == 0 ? 0 : 20));
                 },
               ),
@@ -52,7 +53,7 @@ class VideoHomePage extends BaseStatelessWidget {
           );
         } else {
           return GestureDetector(
-            child: showErrorWithMessage(provider.response.message,true),
+            child: showErrorWithMessage(provider.response.message, true),
             onTap: () => {
               provider.state = VideoModelState.notRequested,
               provider.getVideoHomePageData()
@@ -71,7 +72,7 @@ class VideoHomePage extends BaseStatelessWidget {
     }
   }
 
-  List<Widget> getVideoColumnListWidgetList(List<VideoColumn> videoColumnList) {
+  List<Widget> getVideoColumnListWidgetList(List<Collection> videoColumnList) {
     List<Widget> widgetList = List();
     videoColumnList.forEach((element) {
       widgetList.add(VideoHorizontalList(element));

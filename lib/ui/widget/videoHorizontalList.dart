@@ -1,13 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:mix/entity/VideoColumn.dart';
+import 'package:mix/model/collection.dart';
 import 'package:mix/res/dimens.dart';
 import 'package:mix/ui/view/videoDetailPage.dart';
 import 'package:mix/common/extension.dart';
 
 class VideoHorizontalList extends StatelessWidget {
-  final VideoColumn videoColumn;
-  const VideoHorizontalList(this.videoColumn, {Key key}) : super(key: key);
+  final Collection collection;
+  const VideoHorizontalList(this.collection, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class VideoHorizontalList extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            videoColumn.title,
+            collection.name,
             style: TextStyle(color: Colors.white, fontSize: Dimens.font_sp18),
           ),
           Container(
@@ -27,15 +27,14 @@ class VideoHorizontalList extends StatelessWidget {
               shrinkWrap: true, //解决 listview 嵌套报错
               // physics: NeverScrollableScrollPhysics(), //禁用滑动事件
               scrollDirection: Axis.horizontal,
-              itemCount: videoColumn.videoSimpleList.length,
+              itemCount: collection.videoList.length,
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                     onTap: () => {
                           Navigator.of(context)
                               .push(new MaterialPageRoute(builder: (_) {
                             return new VideoDetailPage(
-                                videoId:
-                                    videoColumn.videoSimpleList[index].videoId);
+                                videoId: collection.videoList[index].id);
                           }))
                         },
                     child: Column(
@@ -44,8 +43,7 @@ class VideoHorizontalList extends StatelessWidget {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: CachedNetworkImage(
-                            imageUrl:
-                                videoColumn.videoSimpleList[index].thumbnailUrl,
+                            imageUrl: collection.videoList[index].coverUrl,
                             placeholder: (context, url) =>
                                 Center(child: CircularProgressIndicator()),
                             errorWidget: (context, url, error) =>
@@ -58,7 +56,7 @@ class VideoHorizontalList extends StatelessWidget {
                         Container(
                           width: 80,
                           child: Text(
-                            videoColumn.videoSimpleList[index].videoName,
+                            collection.videoList[index].name,
                             textAlign: TextAlign.left,
                             style: TextStyle(
                                 color: Colors.white,

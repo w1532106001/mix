@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mix/ui/widget/VideoCategoryWidget.dart';
+import 'package:mix/ui/widget/VideoSearchResultWidget.dart';
 import 'package:mix/viewModel/VideoSearchResultViewModel.dart';
-import 'file:///C:/Users/25082/flutterCode/mix/lib/ui/widget/VideoCategoryWidget.dart';
-import 'file:///C:/Users/25082/flutterCode/mix/lib/ui/widget/VideoSearchResultWidget.dart';
 import 'package:mix/viewModel/VideoSearchViewModel.dart';
 import 'package:provider/provider.dart';
 import 'package:synchronized/extension.dart';

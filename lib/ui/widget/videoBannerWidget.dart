@@ -3,12 +3,12 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mix/common/baseStatelessWidget.dart';
-import 'package:mix/entity/VideoHomePageBanner.dart';
+import 'package:mix/model/banner.dart' as VideoBanner;
 import 'package:mix/res/dimens.dart';
 import 'package:mix/ui/view/videoSearchPage.dart';
 
 class VideoBannerWidget extends BaseStatelessWidget {
-  final VideoHomePageBanner videoHomePageBanner;
+  final VideoBanner.Banner videoHomePageBanner;
 
   const VideoBannerWidget(this.videoHomePageBanner, {Key key})
       : super(key: key);
@@ -28,7 +28,7 @@ class VideoBannerWidget extends BaseStatelessWidget {
                   width: double.infinity,
                   height: bannerHeight,
                   child: CachedNetworkImage(
-                    imageUrl: videoHomePageBanner.imageUrl,
+                    imageUrl: videoHomePageBanner.bannerUrl,
                     placeholder: (context, url) =>
                         Center(child: CircularProgressIndicator()),
                     errorWidget: (context, url, error) =>
@@ -74,13 +74,13 @@ class VideoBannerWidget extends BaseStatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                videoHomePageBanner.title,
+                                videoHomePageBanner.name,
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: Dimens.font_sp18),
                               ),
                               Text(
-                                videoHomePageBanner.description,
+                                videoHomePageBanner.introduction,
                                 style: TextStyle(
                                     color: Colors.white70,
                                     fontSize: Dimens.font_sp12),
@@ -95,7 +95,7 @@ class VideoBannerWidget extends BaseStatelessWidget {
                           padding: EdgeInsets.only(right: Dimens.gap_dp16),
                           alignment: Alignment.centerRight,
                           child: Text(
-                            videoHomePageBanner.score.toString(),
+                            videoHomePageBanner.ratingNum.toString(),
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: Dimens.font_sp18),
@@ -110,7 +110,10 @@ class VideoBannerWidget extends BaseStatelessWidget {
                 right: 10,
                 top: 50,
                 child: GestureDetector(
-                  child: Icon(Icons.search,color: Colors.white,),
+                  child: Icon(
+                    Icons.search,
+                    color: Colors.white,
+                  ),
                   onTap: () => {
                     Navigator.of(context)
                         .push(new MaterialPageRoute(builder: (_) {
