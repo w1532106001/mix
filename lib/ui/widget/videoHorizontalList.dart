@@ -33,8 +33,7 @@ class VideoHorizontalList extends StatelessWidget {
                     onTap: () => {
                           Navigator.of(context)
                               .push(new MaterialPageRoute(builder: (_) {
-                            return new VideoDetailPage(
-                                videoId: collection.videoList[index].id);
+                            return new VideoDetailPage(collection.videoList[index].id);
                           }))
                         },
                     child: Column(

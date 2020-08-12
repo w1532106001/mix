@@ -2,14 +2,14 @@ import 'package:mix/model/video.dart';
 
 import 'collection.dart';
 
-class VideoDetailPage {
+class VideoDetailPageModel {
   Video video;
   List<Collection> collectionList;
   List<Collection> seriesList;
 
-  VideoDetailPage({this.video, this.collectionList, this.seriesList});
+  VideoDetailPageModel({this.video, this.collectionList, this.seriesList});
 
-  VideoDetailPage.fromJson(Map<String, dynamic> json) {
+  VideoDetailPageModel.fromJson(Map<String, dynamic> json) {
     video = json['video'] != null ? new Video.fromJson(json['video']) : null;
     if (json['collectionList'] != null) {
       collectionList = new List<Collection>();

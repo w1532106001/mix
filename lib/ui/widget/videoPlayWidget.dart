@@ -1,11 +1,15 @@
 import 'package:awsome_video_player/awsome_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:mix/common/baseStatelessWidget.dart';
+import 'package:mix/model/video.dart';
 import 'package:mix/viewModel/VideoPlayViewModel.dart';
 import 'package:provider/provider.dart';
 
 
 class VideoPlayWidget extends StatelessWidget {
+  Video video;
+  VideoPlayWidget(this.video);
+
 
   @override
   Widget build(BuildContext context) {

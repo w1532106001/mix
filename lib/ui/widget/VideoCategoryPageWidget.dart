@@ -33,8 +33,7 @@ class VideoCategoryPageWidget extends StatelessWidget {
                 onTap: () => {
                       Navigator.of(context)
                           .push(new MaterialPageRoute(builder: (_) {
-                        return new VideoDetailPage(
-                            videoId: provider.videoList[index].id);
+                        return new VideoDetailPage(provider.videoList[index].id);
                       }))
                     },
                 child: Column(
