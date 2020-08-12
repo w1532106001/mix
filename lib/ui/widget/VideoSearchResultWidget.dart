@@ -68,10 +68,10 @@ class VideoSearchResultWidget extends BaseStatelessWidget {
       controller: provider.controller,
       firstRefresh: false,
       onRefresh: () async {
-        provider.refresh();
+//        provider.refresh();
       },
       onLoad: () async {
-        provider.load();
+//        provider.load();
       },
 //      scrollController: videoSearchViewProvider.scrollController,
     );
