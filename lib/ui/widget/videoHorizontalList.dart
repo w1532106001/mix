@@ -1,3 +1,4 @@
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mix/model/collection.dart';
@@ -7,12 +8,13 @@ import 'package:mix/common/extension.dart';
 
 class VideoHorizontalList extends StatelessWidget {
   final Collection collection;
-  const VideoHorizontalList(this.collection, {Key key}) : super(key: key);
+  final bool isNeedPadding;
+  const VideoHorizontalList(this.collection, {this.isNeedPadding:true,Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 20),
+      padding: EdgeInsets.only(left: isNeedPadding?20:0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[

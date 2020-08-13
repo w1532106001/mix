@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:mix/model/collection.dart';
 import 'package:mix/model/video.dart';
 import 'package:mix/model/video_detail_page.dart';
+import 'package:mix/res/dimens.dart';
 import 'package:mix/ui/widget/videoHorizontalList.dart';
 import 'package:mix/viewModel/VideoPlayViewModel.dart';
 import 'package:provider/provider.dart';
@@ -24,11 +27,12 @@ class VideoDetailBottomWidget extends StatelessWidget {
     final video = videoDetailPageModel.video;
     return !provider.isFullscreen
         ? Container(
-            padding: EdgeInsets.all(10),
-            height: MediaQuery.of(context).size.height - 300,
+            margin:
+                EdgeInsets.only(left: Dimens.gap_dp10, right: Dimens.gap_dp10),
+            height: MediaQuery.of(context).size.height - 256,
             child: ListView(
               children: getVideoColumnListWidgetList(
-                  video, videoDetailPageModel.collectionList),
+                  video, videoDetailPageModel.collectionList, context),
             ))
 
 //    RaisedButton(
@@ -47,23 +51,39 @@ class VideoDetailBottomWidget extends StatelessWidget {
   }
 
   List<Widget> getVideoColumnListWidgetList(
-      Video video, List<Collection> videoColumnList) {
+      Video video, List<Collection> videoColumnList, BuildContext context) {
     List<Widget> widgetList = List();
+    String tags = "";
+    video.tagList.forEach((element) {
+      tags += element.name+" ";
+    });
     widgetList.add(Text(
       video.name,
       style: TextStyle(
-          color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
+          color: Colors.black,
+          fontSize: Dimens.font_sp20,
+          fontWeight: FontWeight.bold),
     ));
-    widgetList.add(Text(
-      "${video.ratingNum}分",style: TextStyle(color: Colors.black, fontSize: 16),));
-    widgetList.add(Text("简介").padding(EdgeInsets.only(top: 5, bottom: 5)));
+    widgetList.add(RichText(
+      text: TextSpan(
+          text: '${video.ratingNum}分',
+          style: TextStyle(color: Colors.black, fontSize: Dimens.font_sp16),
+          children: <TextSpan>[
+            TextSpan(
+              text: " · $tags",
+              style: TextStyle(color: Colors.black, fontSize: Dimens.font_sp16),
+            ),
+          ]),
+    ));
     widgetList.add(ChangeNotifierProvider(
         create: (context) => VideoDetailBottomViewModel(),
         child: Consumer<VideoDetailBottomViewModel>(
             builder: (_, videoDetailBottomViewModel, __) =>
                 videoDetailBottomViewModel.isShowIntroduction
                     ? Html(
-                        data: video.introduction.trim() + " <a>收起</a>",
+                        data: "简介：&nbsp;&nbsp;" +
+                            video.introduction.trim() +
+                            " <a>收起</a>",
                         onLinkTap: (url) => {
                           videoDetailBottomViewModel.setShowIntroduction(false)
                         },
@@ -76,7 +96,8 @@ class VideoDetailBottomWidget extends StatelessWidget {
                       )
                     : RichText(
                         text: TextSpan(
-                          text: video.introduction.substring(0, 50).trim(),
+                          text: "简介：  " +
+                              video.introduction.substring(0, 53).trim(),
                           style: TextStyle(color: Colors.black),
                           children: [
                             TextSpan(
@@ -104,46 +125,121 @@ class VideoDetailBottomWidget extends StatelessWidget {
         ),
       ],
     ));
-    widgetList.add(Container(
-      height: 30,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text(
-            video.name + "▼",
-            style: TextStyle(
-                color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          IconButton(
-            icon: Icon(Icons.chevron_right),
-          ),
-        ],
+    widgetList.add(GestureDetector(
+      child: Container(
+        height: 30,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Row(
+              children: [
+                Text(
+                  video.name,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: Dimens.font_sp18,
+                  ),
+                ),
+                Icon(Icons.arrow_drop_down)
+              ],
+            ),
+            Icon(Icons.chevron_right)
+          ],
+        ),
       ),
+      onTap: () {
+        var maxHeight = MediaQuery.of(context).size.height * (8 / 16);
+        showModalBottomSheet(
+            context: context,
+            builder: (BuildContext context) {
+              return new Container(
+                height: maxHeight,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Container(
+                      height: 30,
+                      margin: EdgeInsets.only(
+                        top: 10,
+                      ),
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: videoDetailPageModel.seriesList[0].videoList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Text(videoDetailPageModel.seriesList[0].videoList[index].name,
+                                  style: TextStyle(
+                                      color: Color(0xff898989),
+                                      fontSize: Dimens.font_sp20))
+                              .padding(EdgeInsets.only(left: 10, right: 10));
+                        },
+                      ),
+                    ),
+                    Container(
+                      color: Colors.white,
+                      height: maxHeight - 40,
+                      child: GridView.builder(
+                          padding: EdgeInsets.all(10),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 5, //每行三列
+                            mainAxisSpacing: 10.0, //主轴方向间距
+                            crossAxisSpacing: 10.0, //水平方向间距
+                            childAspectRatio: 1.0, //纵轴缩放比例
+                          ),
+                          itemCount: videoDetailPageModel.seriesList[0].videoList[2].episodeList.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              width: 10,
+                              height: 10,
+                              decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: Colors.black, width: 1),
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white),
+                              child: Center(
+                                child: GestureDetector(
+                                  child: Text(videoDetailPageModel.seriesList[0].videoList[2].episodeList[index].name),
+                                  onTap: () => {},
+                                ),
+                              ),
+                            );
+                          }),
+                    ),
+                  ],
+                ),
+              );
+            });
+        print('打开合集');
+      },
     ));
     widgetList.add(Container(
       height: 50,
-      margin: EdgeInsets.only(top: 20),
+      margin: EdgeInsets.only(top: 10, bottom: 10),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: 10,
+        itemCount: videoDetailPageModel.seriesList[0].videoList[2].episodeList.length,
         itemBuilder: (BuildContext context, int index) {
           return Container(
             width: 50,
             height: 50,
-            color: Colors.amber,
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.white, width: 5),
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white),
             margin: EdgeInsets.only(right: 10),
             child: Center(
-              child: Text('123'),
-            ).gesture(() => {
-                  //todo点击播放所选集
-                }),
+              child: Text(videoDetailPageModel.seriesList[0].videoList[2].episodeList[index].name),
+            ),
           );
         },
       ),
     ));
 
     videoColumnList.forEach((element) {
-      widgetList.add(VideoHorizontalList(element));
+      widgetList.add(VideoHorizontalList(
+        element,
+        isNeedPadding: false,
+      ));
     });
     return widgetList;
   }
