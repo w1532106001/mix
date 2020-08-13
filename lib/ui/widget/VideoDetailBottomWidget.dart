@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:mix/model/collection.dart';
 import 'package:mix/model/video.dart';
 import 'package:mix/model/video_detail_page.dart';
@@ -54,9 +55,7 @@ class VideoDetailBottomWidget extends StatelessWidget {
           color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
     ));
     widgetList.add(Text(
-      "${video.ratingNum}分 · ${video.episodeList.length}集 · ${video.watchNum}次播放 · 简介  >",
-      style: TextStyle(color: Colors.black, fontSize: 16),
-    ).gesture(() => {print('点击简介')}));
+      "${video.ratingNum}分",style: TextStyle(color: Colors.black, fontSize: 16),));
     widgetList.add(Text("简介").padding(EdgeInsets.only(top: 5, bottom: 5)));
     widgetList.add(ChangeNotifierProvider(
         create: (context) => VideoDetailBottomViewModel(),
