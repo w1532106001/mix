@@ -5,18 +5,30 @@ import 'package:mix/model/video.dart';
 import 'package:mix/viewModel/VideoPlayViewModel.dart';
 import 'package:provider/provider.dart';
 
-
 class VideoPlayWidget extends StatelessWidget {
   Video video;
-  VideoPlayWidget(this.video);
 
+  VideoPlayWidget(
+    this.video,
+  );
 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<VideoPlayViewModel>(context);
-    return provider.videoUrl != ""
+    String url = "";
+    if (provider.episodeId == -1) {
+      url = video.episodeList[0].playUrl;
+    } else {
+      for (int i = 0; i < video.episodeList.length; i++) {
+        if (provider.episodeId == video.episodeList[i].id) {
+          url = video.episodeList[i].playUrl;
+          break;
+        }
+      }
+    }
+    return url != ""
         ? AwsomeVideoPlayer(
-      provider.videoUrl,
+            url,
 
             /// 视频播放配置
             playOptions: VideoPlayOptions(
@@ -280,14 +292,13 @@ class VideoPlayWidget extends StatelessWidget {
             /// 视频暂停回调
             onpause: (value) {
               print("video paused");
-              provider.isPlaying =false;
+              provider.isPlaying = false;
             },
 
             /// 视频播放回调
             onplay: (value) {
               print("video played");
-              provider.isPlaying =true;
-
+              provider.isPlaying = true;
             },
 
             /// 视频播放结束回调

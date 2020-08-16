@@ -41,7 +41,7 @@ class CategoryListLineWidget extends StatelessWidget {
                         tagGroup.tagList[index].groupId,
                         tagGroup.tagList[index]);
                     // ignore: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
-                    provider.notifyListeners();
+                    provider.refresh();
                   },
                 ));
           },

@@ -65,13 +65,30 @@ class VideoSearchResultWidget extends BaseStatelessWidget {
                 ));
           }),
       controller: provider.controller,
-      firstRefresh: false,
       onRefresh: () async {
-//        provider.refresh();
+        provider.refresh();
       },
       onLoad: () async {
-//        provider.load();
+        provider.load();
       },
+
+        header: ClassicalHeader(
+          refreshText: "下拉刷新",
+          refreshReadyText: "松开刷新",
+          refreshingText: "刷新中",
+          refreshedText: "刷新完成",
+          refreshFailedText: "刷新失败",
+          showInfo: false,
+        ),
+        footer: ClassicalFooter(
+            loadText: "上拉加载",
+            loadReadyText: "松开加载",
+            loadingText: "加载中",
+            loadedText: "加载完成",
+            loadFailedText: "加载失败",
+            noMoreText: "没有更多了",
+            showInfo: false,
+            enableInfiniteLoad:false)
 //      scrollController: videoSearchViewProvider.scrollController,
     );
   }

@@ -12,7 +12,8 @@ import 'package:mix/viewModel/VideoSearchViewModel.dart';
 import 'package:provider/provider.dart';
 
 class VideoCategoryWidget extends BaseStatelessWidget {
-  const VideoCategoryWidget({Key key}) : super(key: key);
+  final int tagId;
+  const VideoCategoryWidget({this.tagId,Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,7 @@ class VideoCategoryWidget extends BaseStatelessWidget {
             tagGroupList.add(tagGroup);
           });
           return ChangeNotifierProvider(
-            create: (_) => CategoryViewModel(tagGroupList),
+            create: (_) => CategoryViewModel(tagGroupList,this.tagId),
             child: NestedScrollView(
               controller: provider.scrollController,
               headerSliverBuilder:

@@ -12,18 +12,19 @@ import 'package:mix/model/video.dart';
 import 'package:mix/net/address.dart';
 import 'package:mix/net/data_helper.dart';
 import 'package:mix/net/http_manager.dart';
+import 'package:mix/ui/widget/VideoCategoryPageWidget.dart';
 import 'package:rxdart/rxdart.dart';
 
 class CategoryViewModel extends ChangeNotifier {
   int pageSize = 10;
   int pageNum = 1;
+  int selectId = -1;
   var params = DataHelper.getBaseMap();
-
   Map<int, Tag> selectTagMap = new Map();
   EasyRefreshController controller = EasyRefreshController();
   List<Video> videoList = List();
 
-  CategoryViewModel(List<TagGroup> tagGroupList) {
+  CategoryViewModel(List<TagGroup> tagGroupList, this.selectId) {
     tagGroupList.forEach((element) {
       Tag tag = new Tag();
       tag.id = null;
@@ -31,6 +32,11 @@ class CategoryViewModel extends ChangeNotifier {
       tag.name = "全部";
       element.tagList.insert(0, tag);
       addSelectCategoryMap(element.tagList[0].groupId, tag);
+      element.tagList.forEach((element) {
+        if (element.id == this.selectId) {
+          addSelectCategoryMap(element.groupId, element);
+        }
+      });
     });
   }
 
@@ -45,14 +51,15 @@ class CategoryViewModel extends ChangeNotifier {
     pageSize = 10;
     pageNum = 1;
     params["pageSize"] = pageSize;
-    params["currPage"] = pageNum;
+    params["pageNum"] = pageNum;
     List<int> tagList = new List();
     selectTagMap.forEach((key, value) {
-      if(value.id!=null){
+      if (value.id != null) {
         tagList.add(value.id);
       }
     });
-    params["tagList"] = tagList;
+    params["tagList"] =
+        tagList.toString().replaceAll("[", "").replaceAll("]", "");
     _model.getVideoListByTag(params).doOnListen(() {}).listen((event) {
       //成功
       response = event;
@@ -61,7 +68,7 @@ class CategoryViewModel extends ChangeNotifier {
       page.data.forEach((element) {
         videoList.add(Video.fromJson(element));
       });
-      controller.finishRefresh(success: true,noMore: page.size==0);
+      controller.finishRefresh(success: true, noMore: page.size == 0);
       controller.resetLoadState();
       pageNum++;
       notifyListeners();
@@ -69,7 +76,6 @@ class CategoryViewModel extends ChangeNotifier {
       //失败
       print('onError--------------------------------:$e');
       controller.finishRefresh(success: false);
-
     });
   }
 
@@ -78,11 +84,12 @@ class CategoryViewModel extends ChangeNotifier {
     params["pageNum"] = pageNum;
     List<int> tagList = new List();
     selectTagMap.forEach((key, value) {
-      if(value.id!=null){
+      if (value.id != null) {
         tagList.add(value.id);
       }
     });
-    params["tagList"] = tagList;
+    params["tagList"] =
+        tagList.toString().replaceAll("[", "").replaceAll("]", "");
     _model.getVideoListByTag(params).doOnListen(() {}).listen((event) {
       //成功
       response = event;
@@ -93,6 +100,7 @@ class CategoryViewModel extends ChangeNotifier {
       controller.finishLoad(noMore: !page.hasNextPage);
       pageNum++;
       notifyListeners();
+
     }, onError: (e) {
       //失败
       print('onError--------------------------------:$e');

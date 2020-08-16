@@ -8,7 +8,8 @@ import 'package:synchronized/extension.dart';
 
 ///输入搜索词时替换 分割线已下区域 输入框为空时正常展示分页视频
 class VideoSearchPage extends StatelessWidget {
-  const VideoSearchPage({Key key}) : super(key: key);
+  final int tagId;
+  const VideoSearchPage({this.tagId:-1,Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,7 @@ class VideoSearchPage extends StatelessWidget {
                 create: (context) => VideoSearchResultViewModel(
                     videoSearchViewModel.searchWordController)),
           ],
-          child: _VideoSearchPageColumn(),
+          child: _VideoSearchPageColumn(this.tagId),
         ),
       ),
     );
@@ -35,7 +36,8 @@ class VideoSearchPage extends StatelessWidget {
 }
 
 class _VideoSearchPageColumn extends StatelessWidget {
-  const _VideoSearchPageColumn({Key key}) : super(key: key);
+  final tagId;
+  const _VideoSearchPageColumn(this.tagId,{Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +71,7 @@ class _VideoSearchPageColumn extends StatelessWidget {
               padding: EdgeInsets.only(top: 20),
               child: provider.isSearch
                   ? VideoSearchResultWidget()
-                  : VideoCategoryWidget(),
+                  : VideoCategoryWidget(tagId: this.tagId,),
 //          ),
             ))
       ],

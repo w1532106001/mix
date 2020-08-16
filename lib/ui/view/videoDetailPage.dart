@@ -12,8 +12,9 @@ import 'package:provider/provider.dart';
 
 class VideoDetailPage extends BaseStatelessWidget {
   final int videoId;
+  final int episodeId;
 
-  const VideoDetailPage(this.videoId, {Key key}) : super(key: key);
+  const VideoDetailPage(this.videoId, {this.episodeId:-1 ,Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

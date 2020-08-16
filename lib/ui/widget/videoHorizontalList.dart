@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mix/model/collection.dart';
@@ -9,12 +8,17 @@ import 'package:mix/common/extension.dart';
 class VideoHorizontalList extends StatelessWidget {
   final Collection collection;
   final bool isNeedPadding;
-  const VideoHorizontalList(this.collection, {this.isNeedPadding:true,Key key}) : super(key: key);
+
+  const VideoHorizontalList(this.collection,
+      {this.isNeedPadding: true, Key key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var route = ModalRoute.of(context);
+
     return Padding(
-      padding: EdgeInsets.only(left: isNeedPadding?20:0),
+      padding: EdgeInsets.only(left: isNeedPadding ? 20 : 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -33,10 +37,27 @@ class VideoHorizontalList extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                     onTap: () => {
-                          Navigator.of(context)
-                              .push(new MaterialPageRoute(builder: (_) {
-                            return new VideoDetailPage(collection.videoList[index].id);
-                          }))
+                          if (route != null &&
+                              route.settings.name == 'videoDetailPage')
+                            {
+                              Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                                  builder: (_) {
+                                    return new VideoDetailPage(
+                                        collection.videoList[index].id);
+                                  },
+                                  settings:
+                                  RouteSettings(name: "videoDetailPage")))
+                            }
+                          else
+                            {
+                              Navigator.of(context).push(new MaterialPageRoute(
+                                builder: (_) {
+                                  return new VideoDetailPage(
+                                      collection.videoList[index].id);
+                                },
+                                settings:
+                                RouteSettings(name: "videoDetailPage")))
+                            }
                         },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
