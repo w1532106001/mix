@@ -47,23 +47,26 @@ class _VideoSearchPageColumn extends StatelessWidget {
 
     return Column(
       children: <Widget>[
-        TextField(
-          decoration: InputDecoration(
-            prefixIcon: Icon(Icons.search),
-            // 未获得焦点下划线设为灰色
-            enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey),
+        Container(
+          height: 50,
+          child: TextField(
+            decoration: InputDecoration(
+              prefixIcon: Icon(Icons.search),
+              // 未获得焦点下划线设为灰色
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey),
+              ),
+              //获得焦点下划线设为蓝色
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.blue),
+              ),
             ),
-            //获得焦点下划线设为蓝色
-            focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.blue),
-            ),
+            controller: provider.searchWordController,
+            onChanged: (v) {
+              provider.onInput();
+              videoSearchResultViewProvider.onInputRefresh();
+            },
           ),
-          controller: provider.searchWordController,
-          onChanged: (v) {
-            provider.onInput();
-            videoSearchResultViewProvider.onInputRefresh();
-          },
         ),
         Expanded(
             flex: 1,

@@ -69,7 +69,7 @@ class CategoryViewModel extends ChangeNotifier {
         videoList.add(Video.fromJson(element));
       });
       controller.finishRefresh(success: true, noMore: page.size == 0);
-      controller.resetLoadState();
+//      controller.resetLoadState();
       pageNum++;
       notifyListeners();
     }, onError: (e) {

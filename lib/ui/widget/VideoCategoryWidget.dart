@@ -13,7 +13,8 @@ import 'package:provider/provider.dart';
 
 class VideoCategoryWidget extends BaseStatelessWidget {
   final int tagId;
-  const VideoCategoryWidget({this.tagId,Key key}) : super(key: key);
+
+  const VideoCategoryWidget({this.tagId, Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,52 +36,57 @@ class VideoCategoryWidget extends BaseStatelessWidget {
             tagGroupList.add(tagGroup);
           });
           return ChangeNotifierProvider(
-            create: (_) => CategoryViewModel(tagGroupList,this.tagId),
-            child: NestedScrollView(
-              controller: provider.scrollController,
-              headerSliverBuilder:
-                  (BuildContext context, bool innerBoxIsScrolled) {
-                return <Widget>[
-                  new SliverAppBar(
-                    backgroundColor: Color.fromARGB(255, 43, 42, 50),
-                    automaticallyImplyLeading: false,
-                    floating: false,
-                    pinned: true,
-                    flexibleSpace: innerBoxIsScrolled
-                        ? NestedScrollViewCenterTitle()
-                        : ListView.builder(
-                            shrinkWrap: true,
-                            physics: new NeverScrollableScrollPhysics(),
-                            //加上这句话，widget就不会滑动了
-                            itemCount: tagGroupList.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return CategoryListLineWidget(
-                                tagGroupList[index],
-                              );
-                            }),
-                    expandedHeight: tagGroupList.length * 50.0,
+              create: (_) => CategoryViewModel(tagGroupList, this.tagId),
+              child: Column(
+                children: [
+                  Container(
+                    height: tagGroupList.length*50.toDouble(),
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: new NeverScrollableScrollPhysics(),
+                        //加上这句话，widget就不会滑动了
+                        itemCount: tagGroupList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return CategoryListLineWidget(
+                            tagGroupList[index],
+                          );
+                        }),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: VideoCategoryPageWidget(),
                   )
-                ];
-              },
-              body: VideoCategoryPageWidget(),
-//              children: <Widget>[
-//                ListView.builder(
-//                    shrinkWrap: true,
-//                    physics: new NeverScrollableScrollPhysics(),
-//                    //加上这句话，widget就不会滑动了
-//                    itemCount: categoryGroups.length,
-//                    itemBuilder: (BuildContext context, int index) {
-//                      return CategoryListLineWidget(
-//                        categoryGroups[index],
-//                      );
-//                    }),
-//                Container(
-//                  height: MediaQuery.of(context).size.height-500,
-//                    child: VideoCategoryPageWidget()  )
-
-//                Container()
-            ),
-          );
+                ],
+              )
+//            NestedScrollView(
+//              controller: provider.scrollController,
+//              headerSliverBuilder:
+//                  (BuildContext context, bool innerBoxIsScrolled) {
+//                return <Widget>[
+//                  new SliverAppBar(
+//                    backgroundColor: Color.fromARGB(255, 43, 42, 50),
+//                    automaticallyImplyLeading: false,
+//                    floating: false,
+//                    pinned: true,
+//                    flexibleSpace: innerBoxIsScrolled
+//                        ? NestedScrollViewCenterTitle()
+//                        : ListView.builder(
+//                            shrinkWrap: true,
+//                            physics: new NeverScrollableScrollPhysics(),
+//                            //加上这句话，widget就不会滑动了
+//                            itemCount: tagGroupList.length,
+//                            itemBuilder: (BuildContext context, int index) {
+//                              return CategoryListLineWidget(
+//                                tagGroupList[index],
+//                              );
+//                            }),
+//                    expandedHeight: tagGroupList.length * 50.0,
+//                  )
+//                ];
+//              },
+//              body: VideoCategoryPageWidget(),
+//            ),
+              );
 //        return Container();
         } else {
           return GestureDetector(
@@ -104,32 +110,32 @@ class VideoCategoryWidget extends BaseStatelessWidget {
   }
 }
 
-class NestedScrollViewCenterTitle extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final provider = Provider.of<VideoSearchViewModel>(context);
-    final categoryViewModelProvider = Provider.of<CategoryViewModel>(context);
-
-    String text = "";
-    categoryViewModelProvider.selectTagMap.forEach((key, value) {
-      text += value.name + "·";
-    });
-    return GestureDetector(
-      child: Container(
-          height: 30,
-          child: Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(text.substring(0, text.length - 1)),
-                Icon(Icons.arrow_drop_down)
-              ],
-            ),
-          )),
-      onTap: () {
-        provider.scrollController.animateTo(.0,
-            duration: Duration(milliseconds: 200), curve: Curves.ease);
-      },
-    );
-  }
-}
+//class NestedScrollViewCenterTitle extends StatelessWidget {
+//  @override
+//  Widget build(BuildContext context) {
+//    final provider = Provider.of<VideoSearchViewModel>(context);
+//    final categoryViewModelProvider = Provider.of<CategoryViewModel>(context);
+//
+//    String text = "";
+//    categoryViewModelProvider.selectTagMap.forEach((key, value) {
+//      text += value.name + "·";
+//    });
+//    return GestureDetector(
+//      child: Container(
+//          height: 30,
+//          child: Center(
+//            child: Row(
+//              mainAxisAlignment: MainAxisAlignment.center,
+//              children: <Widget>[
+//                Text(text.substring(0, text.length - 1)),
+//                Icon(Icons.arrow_drop_down)
+//              ],
+//            ),
+//          )),
+//      onTap: () {
+//        provider.scrollController.animateTo(.0,
+//            duration: Duration(milliseconds: 200), curve: Curves.ease);
+//      },
+//    );
+//  }
+//}

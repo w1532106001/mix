@@ -1,5 +1,5 @@
 class Address {
-  static String baseUrl = "http://ruic5i.natappfree.cc/";
+  static String baseUrl = "http://jgvxyr.natappfree.cc/";
 
   static final String videoHomePageDataUrl = "index/videoHomePageData";
   static final String categoryGroupListUrl = "index/tagGroupList?type=0";

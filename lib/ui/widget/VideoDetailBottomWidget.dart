@@ -1,11 +1,13 @@
 import 'dart:ffi';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:mix/model/cast_member.dart';
 import 'package:mix/model/collection.dart';
 import 'package:mix/model/tag.dart';
 import 'package:mix/model/video.dart';
@@ -74,7 +76,7 @@ class VideoDetailBottomWidget extends StatelessWidget {
       text: TextSpan(
           text: '${video.ratingNum}分',
           style: TextStyle(color: Colors.black, fontSize: Dimens.font_sp16),
-          children: getTagsTextSpanWidget(context,video.tagList)),
+          children: getTagsTextSpanWidget(context, video.tagList)),
     ));
     widgetList.add(ChangeNotifierProvider(
         create: (context) => VideoDetailBottomViewModel(),
@@ -246,14 +248,16 @@ class VideoDetailBottomWidget extends StatelessWidget {
                                           onTap: () => {
                                             Navigator.pop(context),
                                             if (video.id ==
-                                                videoModalBottomSheetViewModel.video.id)
+                                                videoModalBottomSheetViewModel
+                                                    .video.id)
                                               {
                                                 provider.setEpisodeId(
                                                     video.episodeList[index].id)
                                               }
                                             else
                                               {
-                                                Navigator.pushReplacement(context,
+                                                Navigator.pushReplacement(
+                                                    context,
                                                     new MaterialPageRoute(
                                                         builder: (_) {
                                                   return new VideoDetailPage(
@@ -303,6 +307,56 @@ class VideoDetailBottomWidget extends StatelessWidget {
       ),
     ));
 
+    List<CastMember> castMemberList = List();
+    castMemberList.addAll(video.directorList);
+    castMemberList.addAll(video.starList);
+    castMemberList.addAll(video.writerList);
+    widgetList.add(Container(
+      margin: EdgeInsets.only(top: 10, bottom: 10),
+      height: 100,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: castMemberList.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: CachedNetworkImage(
+                  imageUrl: castMemberList[index].avatarUrl,
+                  placeholder: (context, url) =>
+                      Center(child: CircularProgressIndicator()),
+                  errorWidget: (context, url, error) =>
+                      Center(child: Icon(Icons.error)),
+                  width: 80,
+                  height: 100,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Positioned(
+                top: 0,
+                left: 0,
+                  child: Text(
+                    castMemberList[index].type==0?"导演":castMemberList[index].type==1?"编剧":"演员",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              Positioned(
+                bottom: 0,
+                width: 80,
+                child: Center(
+                  child: Text(
+                    castMemberList[index].name,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              )
+            ],
+          );
+        },
+      ),
+    ));
+
     videoColumnList.forEach((element) {
       widgetList.add(VideoHorizontalList(
         element,
@@ -312,7 +366,7 @@ class VideoDetailBottomWidget extends StatelessWidget {
     return widgetList;
   }
 
-  List<TextSpan> getTagsTextSpanWidget(BuildContext context,List<Tag> tags){
+  List<TextSpan> getTagsTextSpanWidget(BuildContext context, List<Tag> tags) {
     List<TextSpan> tagWidgets = new List();
     tags.forEach((element) {
       tagWidgets.add(TextSpan(
@@ -320,14 +374,12 @@ class VideoDetailBottomWidget extends StatelessWidget {
           style: TextStyle(color: Colors.blue, fontSize: Dimens.font_sp16),
           recognizer: TapGestureRecognizer()
             ..onTap = () {
-              //todo 跳转到分类页
-              Navigator.push(context,
-                  new MaterialPageRoute(
-                  builder: (_) {
-                return new VideoSearchPage(tagId: element.id,);
+              Navigator.push(context, new MaterialPageRoute(builder: (_) {
+                return new VideoSearchPage(
+                  tagId: element.id,
+                );
               }));
-            }
-      ));
+            }));
     });
     return tagWidgets;
   }

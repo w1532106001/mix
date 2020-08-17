@@ -16,8 +16,8 @@ class VideoPlayWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = Provider.of<VideoPlayViewModel>(context);
     String url = "";
-    if (provider.episodeId == -1) {
-      url = video.episodeList[0].playUrl;
+    if (video.episodeList.length>0 && provider.episodeId == -1) {
+      url = video?.episodeList[0]?.playUrl;
     } else {
       for (int i = 0; i < video.episodeList.length; i++) {
         if (provider.episodeId == video.episodeList[i].id) {

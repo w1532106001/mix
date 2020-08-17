@@ -81,6 +81,7 @@ class VideoCategoryPageWidget extends StatelessWidget {
         refreshingText: "刷新中",
         refreshedText: "刷新完成",
         refreshFailedText: "刷新失败",
+        noMoreText: "没有更多了",
         showInfo: false,
       ),
       footer: ClassicalFooter(
@@ -97,4 +98,10 @@ class VideoCategoryPageWidget extends StatelessWidget {
     );
   }
 
+}
+class VideoCategoryViewModel extends ChangeNotifier {
+  List<Video> videoList = List();
+  setVideoList(List<Video> list){
+    this.videoList = list;
+  }
 }
