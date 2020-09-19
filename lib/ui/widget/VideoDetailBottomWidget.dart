@@ -13,6 +13,7 @@ import 'package:mix/model/tag.dart';
 import 'package:mix/model/video.dart';
 import 'package:mix/model/video_detail_page.dart';
 import 'package:mix/res/dimens.dart';
+import 'package:mix/ui/view/person_view.dart';
 import 'package:mix/ui/view/videoDetailPage.dart';
 import 'package:mix/ui/view/videoSearchPage.dart';
 import 'package:mix/ui/widget/videoHorizontalList.dart';
@@ -318,40 +319,51 @@ class VideoDetailBottomWidget extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemCount: castMemberList.length,
         itemBuilder: (BuildContext context, int index) {
-          return Stack(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: CachedNetworkImage(
-                  imageUrl: castMemberList[index].avatarUrl,
-                  placeholder: (context, url) =>
-                      Center(child: CircularProgressIndicator()),
-                  errorWidget: (context, url, error) =>
-                      Center(child: Icon(Icons.error)),
+          return GestureDetector(
+            child: Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: CachedNetworkImage(
+                    imageUrl: castMemberList[index].avatarUrl,
+                    placeholder: (context, url) =>
+                        Center(child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) =>
+                        Center(child: Icon(Icons.error)),
+                    width: 80,
+                    height: 100,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  child: Text(
+                    castMemberList[index].type == 0
+                        ? "导演"
+                        : castMemberList[index].type == 1 ? "编剧" : "演员",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
                   width: 80,
-                  height: 100,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Positioned(
-                top: 0,
-                left: 0,
-                  child: Text(
-                    castMemberList[index].type==0?"导演":castMemberList[index].type==1?"编剧":"演员",
-                    style: TextStyle(color: Colors.white),
+                  child: Center(
+                    child: Text(
+                      castMemberList[index].name,
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
-                ),
-              Positioned(
-                bottom: 0,
-                width: 80,
-                child: Center(
-                  child: Text(
-                    castMemberList[index].name,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
+            onTap: () {
+              Navigator.push(context, new MaterialPageRoute(builder: (_) {
+                return new PersonView(
+                  castMemberList[index].personId,
+                );
+              }));
+            },
           );
         },
       ),
