@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mix/ui/view/login_view.dart';
 import 'package:mix/ui/view/videoHomePage.dart';
 import 'package:mix/viewModel/VideoHomePageViewModel.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
           backgroundColor: Color.fromARGB(255, 43, 42, 50)),
       home: ChangeNotifierProvider(
-          create: (_) => VideoHomePageViewModel(), child: VideoHomePage()),
+          create: (_) => VideoHomePageViewModel(), child: LoginView()),
     );
   }
 }
