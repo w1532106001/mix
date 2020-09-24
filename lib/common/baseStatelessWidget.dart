@@ -1,13 +1,48 @@
+
 import 'package:flutter/material.dart';
+import 'package:mix/ui/view/login_view.dart';
+import 'package:mix/ui/view/videoHomePage.dart';
+import 'package:mix/viewModel/BaseViewModel.dart';
+import 'package:provider/provider.dart';
+import 'package:mix/common/extension.dart';
 
 import '../res/dimens.dart';
+import 'VideoModelState.dart';
 import 'mvpView.dart';
 
 class BaseStatelessWidget extends StatelessWidget implements MvpView {
   const BaseStatelessWidget({Key key}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<BaseViewModel>(context);
+    switch (provider.state) {
+      case 1:
+        return showLoading();
+      case 2:
+      //用户为空跳转登录页 不为空跳转主页
+        if(provider.currentUser==null){
+//          Navigator.push(context, new MaterialPageRoute(
+//              builder: (_) {
+                return new LoginView();
+//              }));
+        }else{
+//          Navigator.push(context, new MaterialPageRoute(
+//              builder: (_) {
+                return new VideoHomePage();
+//              }));
+        }
+        break;
+      case 3:
+        return GestureDetector(
+          child: showError(true),
+          onTap: () => {
+            provider.state = VideoModelState.notRequested,
+            provider.getUserCache()
+          },
+        );
+    }
     return Container();
   }
 

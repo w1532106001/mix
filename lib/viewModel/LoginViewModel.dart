@@ -15,8 +15,12 @@ import 'package:mix/net/data_helper.dart';
 import 'package:mix/net/http_manager.dart';
 import 'package:mix/ui/widget/VideoCategoryPageWidget.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginViewModel extends ChangeNotifier {
+
+  String currentUser;
+
   String username;
   String password;
 
@@ -66,6 +70,10 @@ class LoginViewModel extends ChangeNotifier {
   }
 
 
+  setUserCache(String user) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('user', user);
+  }
 
 
 }

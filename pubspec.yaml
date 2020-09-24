@@ -40,6 +40,7 @@ dependencies:
   awsome_video_player: ^1.0.8+1
   flutter_rating_bar: ^3.0.1+1
   flutter_html: ^1.0.2
+  shared_preferences: ^0.5.12
 
 dev_dependencies:
   flutter_test:

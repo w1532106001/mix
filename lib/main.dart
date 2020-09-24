@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mix/common/baseStatelessWidget.dart';
 import 'package:mix/ui/view/login_view.dart';
 import 'package:mix/ui/view/videoHomePage.dart';
+import 'package:mix/viewModel/BaseViewModel.dart';
 import 'package:mix/viewModel/VideoHomePageViewModel.dart';
 import 'package:provider/provider.dart';
 
@@ -30,8 +32,21 @@ class MyApp extends StatelessWidget {
           // closer together (more dense) than on mobile platforms.
           visualDensity: VisualDensity.adaptivePlatformDensity,
           backgroundColor: Color.fromARGB(255, 43, 42, 50)),
-      home: ChangeNotifierProvider(
-          create: (_) => VideoHomePageViewModel(), child: LoginView()),
+      home:
+      MultiProvider(providers: [
+        ChangeNotifierProvider<VideoHomePageViewModel>(
+            create: (context) => VideoHomePageViewModel()),
+        ChangeNotifierProvider<BaseViewModel>(
+            create: (context) => BaseViewModel()),
+      ],
+      child:  SafeArea(
+          top: true,
+          child: Scaffold(
+            backgroundColor: Color.fromARGB(255, 43, 42, 50),
+            body: BaseStatelessWidget(),
+          )))
+//      ChangeNotifierProvider(
+//          create: (_) => VideoHomePageViewModel(), child: BaseStatelessWidget()),
     );
   }
 }
