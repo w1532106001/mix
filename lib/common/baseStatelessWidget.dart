@@ -1,4 +1,5 @@
 
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:mix/ui/view/login_view.dart';
 import 'package:mix/ui/view/videoHomePage.dart';
@@ -47,7 +48,9 @@ class BaseStatelessWidget extends StatelessWidget implements MvpView {
   }
 
   @override
-  hideProgressDialog() {}
+  hideProgressDialog() {
+    BotToast.closeAllLoading();
+  }
 
   @override
   Widget showError(bool isReload) {
@@ -99,8 +102,18 @@ class BaseStatelessWidget extends StatelessWidget implements MvpView {
   }
 
   @override
-  showMessage(String message) {}
+  showMessage(String message) {
+    BotToast.showSimpleNotification(
+      title: message
+    );
+  }
 
   @override
-  showProgressDialog(String message) {}
+  showProgressDialog(String message) {
+    BotToast.showLoading(
+      duration: null,
+      clickClose: false,
+      allowClick: false,
+    );
+  }
 }

@@ -23,7 +23,8 @@ class LoginViewModel extends ChangeNotifier {
 
   String username;
   String password;
-
+  TextEditingController usernameController = new TextEditingController();
+  TextEditingController pwdController = new TextEditingController();
   final _loginModel = LoginModel();
   final _registerModel = RegisterModel();
   var response = BaseData();
@@ -33,7 +34,7 @@ class LoginViewModel extends ChangeNotifier {
   login() {
     /// 不为 0 说明上一条请求未完成，直接退出
     if (state != VideoModelState.notRequested) return;
-    _loginModel.getPerson(1).doOnListen(() {
+    _loginModel.login(username).doOnListen(() {
       state = VideoModelState.requesting;
       notifyListeners();
     }).listen((event) {
@@ -80,8 +81,11 @@ class LoginViewModel extends ChangeNotifier {
 
 class LoginModel {
   var params = DataHelper.getBaseMap();
-  Stream getPerson(personId) => Stream.fromFuture(
-      HttpManager.getInstance().get(Address.personUrl+personId.toString(), params));
+  Stream login(username) => Stream.fromFuture(
+      Future.delayed(Duration(milliseconds: 2500), () {
+        return username;
+      })
+  );
 }
 class RegisterModel {
   var params = DataHelper.getBaseMap();

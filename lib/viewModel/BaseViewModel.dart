@@ -26,6 +26,7 @@ class BaseViewModel extends ChangeNotifier {
   int state = VideoModelState.notRequested;
 
   BaseViewModel(){
+//    deleteUserCache();
     getUserCache();
   }
   // 0 未请求，1 正在请求， 2 请求成功， 3请求失败
@@ -52,7 +53,10 @@ class BaseViewModel extends ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('user', user);
   }
-
+  deleteUserCache() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('user');
+  }
 
 }
 

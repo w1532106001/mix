@@ -1,4 +1,6 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mix/common/VideoModelState.dart';
 import 'package:mix/common/baseStatelessWidget.dart';
 import 'package:mix/entity/person.dart';
@@ -10,6 +12,7 @@ import 'package:mix/ui/widget/person_video_list_widget.dart';
 
 import 'package:mix/ui/widget/videoBannerWidget.dart';
 import 'package:mix/ui/widget/videoHorizontalList.dart';
+import 'package:mix/viewModel/BaseViewModel.dart';
 import 'package:mix/viewModel/LoginViewModel.dart';
 import 'package:mix/viewModel/PersonViewModel.dart';
 import 'package:mix/viewModel/VideoHomePageViewModel.dart';
@@ -38,9 +41,28 @@ class LoginView extends BaseStatelessWidget {
     final width = size.width;
     final height = size.height;
     final provider = Provider.of<LoginViewModel>(context);
+    final baseProvider = Provider.of<BaseViewModel>(context);
+    switch (provider.state) {
+      case 1:
+        showProgressDialog(null);
+        break;
+      case 2:
+        //请求成功拿到response 解析实体类
+        provider.state = VideoModelState.notRequested;
+        hideProgressDialog();
+        BotToast.showSimpleNotification(title: "登录成功");
+        provider.setUserCache(provider.usernameController.text);
+//        Navigator.pop(context);
+        baseProvider.getUserCache();
+
+        break;
+      case 3:
+        provider.state = VideoModelState.notRequested;
+        showMessage("网络异常");
+    }
+
     GlobalKey _formKey = new GlobalKey<FormState>();
-    TextEditingController _usernameController = new TextEditingController();
-    TextEditingController _pwdController = new TextEditingController();
+
     return Container(
       padding: EdgeInsets.all(10),
       child: Form(
@@ -51,7 +73,7 @@ class LoginView extends BaseStatelessWidget {
           children: <Widget>[
             TextFormField(
                 autofocus: true,
-                controller: _usernameController,
+                controller: provider.usernameController,
                 decoration: InputDecoration(
                     labelText: "用户名",
                     hintText: "用户名或邮箱",
@@ -61,7 +83,7 @@ class LoginView extends BaseStatelessWidget {
                   return v.trim().length > 0 ? null : "用户名不能为空";
                 }),
             TextFormField(
-                controller: _pwdController,
+                controller: provider.pwdController,
                 decoration: InputDecoration(
                     labelText: "密码",
                     hintText: "您的登录密码",
@@ -94,6 +116,7 @@ class LoginView extends BaseStatelessWidget {
                           // 通过后再提交数据。
                           if ((_formKey.currentState as FormState).validate()) {
                             //验证通过提交数据
+                            provider.login();
                           }
                         },
                       ),
