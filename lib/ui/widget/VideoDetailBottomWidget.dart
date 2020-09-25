@@ -225,9 +225,8 @@ class VideoDetailBottomWidget extends StatelessWidget {
                                         crossAxisSpacing: 10.0, //水平方向间距
                                         childAspectRatio: 1.0, //纵轴缩放比例
                                       ),
-                                      itemCount:  videoModalBottomSheetViewModel
-                                          .video
-                                          .episodeList.length,
+                                      itemCount: videoModalBottomSheetViewModel
+                                          .video.episodeList.length,
                                       itemBuilder: (context, index) {
                                         return GestureDetector(
                                           child: Container(

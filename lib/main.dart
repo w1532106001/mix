@@ -2,6 +2,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:mix/common/baseStatelessWidget.dart';
 import 'package:mix/ui/view/login_view.dart';
+import 'package:mix/ui/view/mine_view.dart';
 import 'package:mix/ui/view/videoHomePage.dart';
 import 'package:mix/viewModel/BaseViewModel.dart';
 import 'package:mix/viewModel/VideoHomePageViewModel.dart';
@@ -47,7 +48,7 @@ class MyApp extends StatelessWidget {
                 top: true,
                 child: Scaffold(
                   backgroundColor: Color.fromARGB(255, 43, 42, 50),
-                  body: BaseStatelessWidget(),
+                  body: MineView(),
                 )))
 //      ChangeNotifierProvider(
 //          create: (_) => VideoHomePageViewModel(), child: BaseStatelessWidget()),
